@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 public class AuthController{
-    @PutMapping("/hello")
+    @GetMapping("/hello")
     public String sayHello(){
         return "Hello";
     }
