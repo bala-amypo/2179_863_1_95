@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
-import 
+import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.PutMapping
 
 @RestController
 public class AuthController{
