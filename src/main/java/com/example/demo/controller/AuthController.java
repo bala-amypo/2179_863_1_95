@@ -4,6 +4,6 @@ package com.example.demo.controller;
 public class AuthController{
     @PutMapping("/hello")
     public String sayHello(){
-        return Hello;
+        return "Hello";
     }
 }
