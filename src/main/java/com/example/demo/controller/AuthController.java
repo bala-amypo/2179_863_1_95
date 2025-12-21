@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 public class AuthController{
     @GetMapping("/hello")
-    public String sayHello(cart){
+    public String sayHello(String cart){
         return cart;
     }
 }
