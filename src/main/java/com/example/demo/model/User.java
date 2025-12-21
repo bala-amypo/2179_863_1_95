@@ -8,6 +8,12 @@ import java.util.List;
 @Table(name="users")
 public class User{
     @Id
-    @GeneratedValue(strategy)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column()
 
 }
