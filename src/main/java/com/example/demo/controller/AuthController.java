@@ -1,7 +1,7 @@
-package com.example.auth.controller;
+package com.example.demo.controller;
 
-import com.example.auth.dto.AuthResponse;
-import com.example.auth.entity.User;
+import com.example.demo.dto.AuthResponse;
+import com.example.demo.model.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
