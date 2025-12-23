@@ -21,5 +21,10 @@ public class OpenApiConfig {
         public ServletRegistrationBean<SimpleHelloServlet> helloServlet() {
                 return new ServletRegistrationBean<>(new SimpleHelloServlet(), "/hello-servlet");
 }
+@Bean
+public org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder passwordEncoder() {
+    return new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
+}
+
 
 }
