@@ -31,6 +31,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleGeneric(Exception ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("<<<There is the Internal Server Error in Personal Finance Planner>>>");
+                .body("<There is the Internal Server Error in Personal Finance Planner>");
     }
 }
