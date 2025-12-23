@@ -18,8 +18,8 @@ public class OpenApiConfig {
                 ));
         }
         @Bean
-public ServletRegistrationBean<SimpleHelloServlet> helloServlet() {
-    return new ServletRegistrationBean<>(new SimpleHelloServlet(), "/hello-servlet");
+        public ServletRegistrationBean<SimpleHelloServlet> helloServlet() {
+                return new ServletRegistrationBean<>(new SimpleHelloServlet(), "/hello-servlet");
 }
 
 }
