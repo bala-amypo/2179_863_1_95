@@ -17,4 +17,9 @@ public class OpenApiConfig {
                         new Server().url("https://9180.pro604cr.amypo.ai")
                 ));
         }
+        @Bean
+public ServletRegistrationBean<SimpleHelloServlet> helloServlet() {
+    return new ServletRegistrationBean<>(new SimpleHelloServlet(), "/hello-servlet");
+}
+
 }
