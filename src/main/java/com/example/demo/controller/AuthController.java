@@ -1,32 +1,31 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.AuthResponse;
-import com.example.demo.model.User;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.demo.dto.*;
+import com.example.demo.model.User;
+import com.example.demo.service.UserService;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private List<User> users = new ArrayList<>();
+    private final UserService userService;
 
-    @PostMapping("/signup")
-    public AuthResponse signup(@RequestBody User user) {
-        users.add(user);
-        return new AuthResponse("Signup successful", true);
+    public AuthController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/register")
+    public User register(@RequestBody RegisterRequest request) {
+        User user = new User();
+        user.setName(request.name);
+        user.setEmail(request.email);
+        user.setPassword(request.password);
+        return userService.register(user);
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody User user) {
-        for (User u : users) {
-            if (u.getUsername().equals(user.getUsername()) &&
-                u.getPassword().equals(user.getPassword())) {
-                return new AuthResponse("Login successful", true);
-            }
-        }
-        return new AuthResponse("Invalid credentials", false);
+    public AuthResponse login(@RequestBody LoginRequest request) {
+        return new AuthResponse("dummy-jwt-token");
     }
 }
