@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class MyAuthenticationFilter implements Filter {
+public class JwtAuthenticationFilter implements Filter {
 
     @Override
     public void doFilter(
