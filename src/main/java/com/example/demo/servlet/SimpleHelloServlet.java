@@ -1,6 +1,6 @@
 package com.example.demo.servlet;
 
-import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.*;
 
 @WebServlet("hello-servlet")
 public class SimpleHelloServlet extends HttpServlet{
@@ -14,7 +14,7 @@ public class SimpleHelloServlet extends HttpServlet{
     
     @Overrride
     protected void doPost(HttpServletRequest req,HttpServletResponse res) throws IOException{
-        
+        res.setStatus(HttpServletResponse.SC_OK);
     }
 
 
