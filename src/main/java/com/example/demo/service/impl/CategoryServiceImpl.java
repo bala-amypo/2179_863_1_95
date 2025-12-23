@@ -4,6 +4,7 @@ import com.example.demo.model.Category;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.service.CategoryService;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -15,12 +16,15 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category create(Category category) {
-
+    public Category addCategory(Category category) {
         if (categoryRepository.existsByName(category.getName())) {
             throw new RuntimeException("Category already exists");
         }
-
         return categoryRepository.save(category);
+    }
+
+    @Override
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
     }
 }

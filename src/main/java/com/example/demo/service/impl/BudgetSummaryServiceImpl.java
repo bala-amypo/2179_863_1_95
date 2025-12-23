@@ -41,10 +41,9 @@ public class BudgetSummaryServiceImpl implements BudgetSummaryService {
         BudgetPlan plan = planRepository.findById(budgetPlanId)
                 .orElseThrow(() -> new ResourceNotFoundException("Budget plan not found"));
 
-        BudgetSummary summary = summaryRepository.findByBudgetPlan(plan);
-        if (summary == null) {
-            throw new ResourceNotFoundException("Summary not found");
-        }
+        BudgetSummary summary = summaryRepository.findByBudgetPlan(plan)
+                .orElseThrow(() -> new ResourceNotFoundException("Summary not found"));
+        
         return summary;
     }
 }
