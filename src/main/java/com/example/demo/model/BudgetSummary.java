@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 @Entity
 public class BudgetSummary {
 
+    public static final String STATUS_UNDER_LIMIT = "UNDER_LIMIT";
+    public static final String STATUS_OVER_LIMIT = "OVER_LIMIT";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,7 +28,10 @@ public class BudgetSummary {
 
     public Long getId() { return id; }
     public BudgetPlan getBudgetPlan() { return budgetPlan; }
+    public Double getTotalIncome() { return totalIncome; }
+    public Double getTotalExpense() { return totalExpense; }
     public String getStatus() { return status; }
+    public LocalDateTime getGeneratedAt() { return generatedAt; }
 
     public void setBudgetPlan(BudgetPlan budgetPlan) { this.budgetPlan = budgetPlan; }
     public void setTotalIncome(Double totalIncome) { this.totalIncome = totalIncome; }
