@@ -25,11 +25,12 @@ public class TransactionLog {
 
     public TransactionLog() {}
 
+    public void validate() {
+        if (amount <= 0) throw new RuntimeException("Amount must be positive");
+    }
+
     public Long getId() { return id; }
-
-    // Required by tests: Accept long primitive
     public void setId(long id) { this.id = id; }
-
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
     public Category getCategory() { return category; }

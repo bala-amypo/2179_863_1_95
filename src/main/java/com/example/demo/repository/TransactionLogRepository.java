@@ -8,5 +8,6 @@ import java.time.LocalDate;
 
 public interface TransactionLogRepository extends JpaRepository<TransactionLog, Long> {
     List<TransactionLog> findByUserAndTransactionDateBetween(User user, LocalDate start, LocalDate end);
-    List<TransactionLog> findByUser(User user); // Required by tests
+    List<TransactionLog> findByUser(User user);
+    List<TransactionLog> findByUserId(Long userId); // Fix for TransactionServiceImpl
 }

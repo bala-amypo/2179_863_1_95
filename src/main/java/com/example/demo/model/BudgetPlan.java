@@ -19,11 +19,15 @@ public class BudgetPlan {
 
     public BudgetPlan() {}
 
+    public void validate() {
+        if (limitAmount < 0) throw new RuntimeException("Limit cannot be negative");
+        if (month == null || month < 1 || month > 12) throw new RuntimeException("Invalid month");
+    }
+
+    public double getExpenseLimit() { return limitAmount; }
+
     public Long getId() { return id; }
-
-    // Required by tests: Accept long primitive
     public void setId(long id) { this.id = id; }
-
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
     public Integer getMonth() { return month; }
