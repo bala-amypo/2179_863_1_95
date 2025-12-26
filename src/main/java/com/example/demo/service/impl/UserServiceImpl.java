@@ -11,27 +11,27 @@ import com.example.demo.exception.ResourceNotFoundException;
 
 @Service
 public class UserServiceImpl implements UserService {
-
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    public User register(User user) {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new ConflictException("Email already exists");
-        }
-        user.setPassword(encoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User findByEmail(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        return user;
-    }
+ private final UserRepository userRepository;
+ private final PasswordEncoder passwordEncoder;
+ public UserServiceImpl(UserRepository userRepository,
+ PasswordEncoder passwordEncoder) {
+ this.userRepository = userRepository;
+ this.passwordEncoder = passwordEncoder;
+ }
+ @Override
+ public User register(User user) {
+ if (userRepository.existsByEmail(user.getEmail())) {
+ throw new BadRequestException("Email already exists");
+ }
+ if (user.getRole() == null) {
+ user.setRole("USER");
+ }
+ user.setPassword(passwordEncoder.encode(user.getPassword()));
+ return userRepository.save(user);
+ }
+ @Override
+ public User findByEmail(String email) {
+ return userRepository.findByEmail(email)
+ .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+ }
 }
