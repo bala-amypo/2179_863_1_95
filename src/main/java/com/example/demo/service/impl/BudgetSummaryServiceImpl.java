@@ -50,8 +50,9 @@ public class BudgetSummaryServiceImpl implements BudgetSummaryService {
         return summaryRepository.save(summary);
     }
 
+    // Fixed: Renamed from getSummaryByPlan to getSummary to match the Interface
     @Override
-    public BudgetSummary getSummaryByPlan(Long planId) {
+    public BudgetSummary getSummary(Long planId) {
         BudgetPlan plan = planRepository.findById(planId)
                 .orElseThrow(() -> new ResourceNotFoundException("Plan not found"));
         return summaryRepository.findByBudgetPlan(plan)
