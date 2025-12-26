@@ -17,17 +17,16 @@ import java.util.List;
 
 @Service
 public class BudgetSummaryServiceImpl implements BudgetSummaryService {
-
-    private final BudgetPlanRepository planRepository;
-    private final BudgetSummaryRepository summaryRepository;
+    private final BudgetSummaryRepository budgetSummaryRepository;
+    private final BudgetPlanRepository budgetPlanRepository;
     private final TransactionLogRepository transactionLogRepository;
 
-    public BudgetSummaryServiceImpl(
-            BudgetPlanRepository planRepository,
-            BudgetSummaryRepository summaryRepository,
-            TransactionLogRepository transactionLogRepository) {
-        this.planRepository = planRepository;
-        this.summaryRepository = summaryRepository;
+    // Fixed constructor order to match line 66 of tests
+    public BudgetSummaryServiceImpl(BudgetSummaryRepository budgetSummaryRepository, 
+                                    BudgetPlanRepository budgetPlanRepository, 
+                                    TransactionLogRepository transactionLogRepository) {
+        this.budgetSummaryRepository = budgetSummaryRepository;
+        this.budgetPlanRepository = budgetPlanRepository;
         this.transactionLogRepository = transactionLogRepository;
     }
 

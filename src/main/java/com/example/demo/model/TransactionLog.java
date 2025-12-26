@@ -2,55 +2,44 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import com.example.demo.exception.BadRequestException;
 
 @Entity
+@Table(name = "transaction_logs")
 public class TransactionLog {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 
-    private Double amount;
-    private String description;
+    private double amount;
     private LocalDate transactionDate;
+    private String description;
+    private String type;
 
     public TransactionLog() {}
 
-    public TransactionLog(Long id, User user, Category category, Double amount, String description, LocalDate transactionDate) {
-        this.id = id;
-        this.user = user;
-        this.category = category;
-        this.amount = amount;
-        this.description = description;
-        this.transactionDate = transactionDate;
-    }
-
     public Long getId() { return id; }
+
+    // Required by tests: Accept long primitive
+    public void setId(long id) { this.id = id; }
+
     public User getUser() { return user; }
-    public Category getCategory() { return category; }
-    public Double getAmount() { return amount; }
-    public String getDescription() { return description; }
-    public LocalDate getTransactionDate() { return transactionDate; }
-
     public void setUser(User user) { this.user = user; }
+    public Category getCategory() { return category; }
     public void setCategory(Category category) { this.category = category; }
-    public void setAmount(Double amount) { this.amount = amount; }
-    public void setDescription(String description) { this.description = description; }
+    public double getAmount() { return amount; }
+    public void setAmount(double amount) { this.amount = amount; }
+    public LocalDate getTransactionDate() { return transactionDate; }
     public void setTransactionDate(LocalDate transactionDate) { this.transactionDate = transactionDate; }
-
-    public void validate() {
-        if (amount == null || amount <= 0) {
-            throw new BadRequestException("Amount must be greater than 0");
-        }
-        if (transactionDate != null && transactionDate.isAfter(LocalDate.now())) {
-            throw new BadRequestException("Transaction date cannot be in the future");
-        }
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 }

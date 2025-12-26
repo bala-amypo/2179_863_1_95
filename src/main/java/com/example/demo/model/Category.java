@@ -1,22 +1,15 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import com.example.demo.exception.BadRequestException;
 
 @Entity
+@Table(name = "categories")
 public class Category {
-
-    public static final String TYPE_INCOME = "INCOME";
-    public static final String TYPE_EXPENSE = "EXPENSE";
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true)
     private String name;
-
-    private String type;
+    private String type; // INCOME or EXPENSE
 
     public Category() {}
 
@@ -27,15 +20,12 @@ public class Category {
     }
 
     public Long getId() { return id; }
+    
+    // Required by tests: Accept long primitive
+    public void setId(long id) { this.id = id; } 
+
     public String getName() { return name; }
-    public String getType() { return type; }
-
     public void setName(String name) { this.name = name; }
+    public String getType() { return type; }
     public void setType(String type) { this.type = type; }
-
-    public void validateType() {
-        if (!TYPE_INCOME.equals(type) && !TYPE_EXPENSE.equals(type)) {
-            throw new BadRequestException("Invalid category type");
-        }
-    }
 }
