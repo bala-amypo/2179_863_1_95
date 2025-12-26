@@ -1,73 +1,59 @@
 package com.example.demo.service.impl;
 
 import org.springframework.stereotype.Service;
-
-import com.example.demo.model.BudgetPlan;
-import com.example.demo.model.BudgetSummary;
-import com.example.demo.model.Category;
-import com.example.demo.model.TransactionLog;
-import com.example.demo.repository.BudgetPlanRepository;
-import com.example.demo.repository.BudgetSummaryRepository;
-import com.example.demo.repository.TransactionLogRepository;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
 import com.example.demo.service.BudgetSummaryService;
 import com.example.demo.exception.ResourceNotFoundException;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class BudgetSummaryServiceImpl implements BudgetSummaryService {
-    private final BudgetSummaryRepository budgetSummaryRepository;
-    private final BudgetPlanRepository budgetPlanRepository;
-    private final TransactionLogRepository transactionLogRepository;
+    private final BudgetSummaryRepository summaryRepository;
+    private final BudgetPlanRepository planRepository;
+    private final TransactionLogRepository transactionRepo;
 
-    // Fixed constructor order to match line 66 of tests
-    public BudgetSummaryServiceImpl(BudgetSummaryRepository budgetSummaryRepository, 
-                                    BudgetPlanRepository budgetPlanRepository, 
-                                    TransactionLogRepository transactionLogRepository) {
-        this.budgetSummaryRepository = budgetSummaryRepository;
-        this.budgetPlanRepository = budgetPlanRepository;
-        this.transactionLogRepository = transactionLogRepository;
+    public BudgetSummaryServiceImpl(BudgetSummaryRepository summaryRepository, 
+                                    BudgetPlanRepository planRepository, 
+                                    TransactionLogRepository transactionRepo) {
+        this.summaryRepository = summaryRepository;
+        this.planRepository = planRepository;
+        this.transactionRepo = transactionRepo;
     }
 
     @Override
-    public BudgetSummary generateSummary(Long budgetPlanId) {
-        BudgetPlan plan = planRepository.findById(budgetPlanId)
-                .orElseThrow(() -> new ResourceNotFoundException("Budget plan not found"));
+    public BudgetSummary generateSummary(Long planId) {
+        BudgetPlan plan = planRepository.findById(planId)
+                .orElseThrow(() -> new ResourceNotFoundException("Plan not found"));
 
-        LocalDate start = LocalDate.of(plan.getYear(), plan.getMonth(), 1);
-        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
-
-        List<TransactionLog> transactions = transactionLogRepository.findByUserAndTransactionDateBetween(plan.getUser(), start, end);
-
-        double totalIncome = transactions.stream()
-                .filter(t -> Category.TYPE_INCOME.equals(t.getCategory().getType()))
-                .mapToDouble(TransactionLog::getAmount)
-                .sum();
-
-        double totalExpense = transactions.stream()
-                .filter(t -> Category.TYPE_EXPENSE.equals(t.getCategory().getType()))
-                .mapToDouble(TransactionLog::getAmount)
-                .sum();
-
-        BudgetSummary summary = summaryRepository.findByBudgetPlan(plan).orElse(new BudgetSummary());
-        summary.setBudgetPlan(plan);
-        summary.setTotalIncome(totalIncome);
-        summary.setTotalExpense(totalExpense);
+        List<TransactionLog> logs = transactionRepo.findByUser(plan.getUser());
         
-        if (totalExpense <= plan.getExpenseLimit()) {
-            summary.setStatus(BudgetSummary.STATUS_UNDER_LIMIT);
-        } else {
-            summary.setStatus(BudgetSummary.STATUS_OVER_LIMIT);
-        }
+        double income = logs.stream()
+                .filter(l -> Category.TYPE_INCOME.equals(l.getType()))
+                .mapToDouble(TransactionLog::getAmount).sum();
+        
+        double expense = logs.stream()
+                .filter(l -> Category.TYPE_EXPENSE.equals(l.getType()))
+                .mapToDouble(TransactionLog::getAmount).sum();
+
+        BudgetSummary summary = summaryRepository.findByBudgetPlan(plan)
+                .orElse(new BudgetSummary());
+        
+        summary.setBudgetPlan(plan);
+        summary.setTotalIncome(income);
+        summary.setTotalExpense(expense);
+        summary.setGeneratedAt(LocalDateTime.now());
+        summary.setStatus(expense > plan.getExpenseLimit() ? 
+                BudgetSummary.STATUS_OVER_LIMIT : BudgetSummary.STATUS_UNDER_LIMIT);
 
         return summaryRepository.save(summary);
     }
 
     @Override
-    public BudgetSummary getSummary(Long budgetPlanId) {
-        BudgetPlan plan = planRepository.findById(budgetPlanId)
-                .orElseThrow(() -> new ResourceNotFoundException("Budget plan not found"));
+    public BudgetSummary getSummaryByPlan(Long planId) {
+        BudgetPlan plan = planRepository.findById(planId)
+                .orElseThrow(() -> new ResourceNotFoundException("Plan not found"));
         return summaryRepository.findByBudgetPlan(plan)
                 .orElseThrow(() -> new ResourceNotFoundException("Summary not found"));
     }

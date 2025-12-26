@@ -28,8 +28,8 @@ public class AuthController {
     public User register(@RequestBody RegisterRequest request) {
         User user = new User();
         user.setName(request.name);
-        user.setEmail(request.email);
-        user.setPassword(request.password);
+        user.setEmail(request.getemail);
+        user.setPassword(request.getPassword);
         return userService.register(user);
     }
 
