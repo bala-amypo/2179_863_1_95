@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.demo.model.User;
@@ -14,30 +15,28 @@ import com.example.demo.exception.ResourceNotFoundException;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder encoder;
+    private final PasswordEncoder encoder;
 
-    // Default constructor for Spring
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-        this.encoder = new BCryptPasswordEncoder();
-    }
-    
-    // Constructor for Tests if they inject the encoder manually (optional but good practice)
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder encoder) {
+    // Required by tests: Constructor Injection for PasswordEncoder
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.encoder = encoder;
     }
 
+    // Fallback constructor if Spring needs it (optional if PasswordConfig is correct)
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+        this.encoder = new BCryptPasswordEncoder();
+    }
+
     @Override
     public User register(User user) {
-        // Requirement: Use existsByEmail
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new BadRequestException("Email already exists");
         }
         
         user.setPassword(encoder.encode(user.getPassword()));
         
-        // Requirement: Default role to USER if null
         if (user.getRole() == null) {
             user.setRole("USER");
         }
