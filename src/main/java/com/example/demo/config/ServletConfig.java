@@ -1,9 +1,18 @@
 package com.example.demo.config;
 
-import org.springframework.boot.web.servlet.ServletComponentScan;
+import com.example.demo.servlet.SimpleHelloServlet;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 
 @Configuration
-@ServletComponentScan(basePackages = "com.example.demo.servlet")
 public class ServletConfig {
+
+    @Bean
+    public ServletRegistrationBean<SimpleHelloServlet> helloServlet() {
+        return new ServletRegistrationBean<>(
+                new SimpleHelloServlet(),
+                "/hello-servlet"
+        );
+    }
 }
