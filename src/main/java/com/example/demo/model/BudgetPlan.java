@@ -3,37 +3,28 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "budget_plans")
 public class BudgetPlan {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
 
     private Integer month;
     private Integer year;
-    private double limitAmount;
-
-    public BudgetPlan() {}
-
-    public void validate() {
-        if (limitAmount < 0) throw new RuntimeException("Limit cannot be negative");
-        if (month == null || month < 1 || month > 12) throw new RuntimeException("Invalid month");
-    }
-
-    public double getExpenseLimit() { return limitAmount; }
+    private Double incomeTarget;
+    private Double expenseLimit;
 
     public Long getId() { return id; }
-    public void setId(long id) { this.id = id; }
     public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
     public Integer getMonth() { return month; }
-    public void setMonth(Integer month) { this.month = month; }
     public Integer getYear() { return year; }
+
+    public void setUser(User user) { this.user = user; }
+    public void setMonth(Integer month) { this.month = month; }
     public void setYear(Integer year) { this.year = year; }
-    public double getLimitAmount() { return limitAmount; }
-    public void setLimitAmount(double limitAmount) { this.limitAmount = limitAmount; }
+    public void setIncomeTarget(Double incomeTarget) { this.incomeTarget = incomeTarget; }
+    public void setExpenseLimit(Double expenseLimit) { this.expenseLimit = expenseLimit; }
 }
