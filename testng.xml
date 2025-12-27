@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="PersonalFinanceBudgetPlannerSuite">
+
+    <test name="All Tests">
+        <classes>
+            <class name="com.example.demo.PersonalFinanceBudgetPlannerTest"/>
+        </classes>
+    </test>
+
+</suite>
