@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.BudgetPlan;
 import com.example.demo.service.BudgetPlanService;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
-@RequestMapping("/budgets")
+@RequestMapping("/api/budget-plans")
 public class BudgetPlanController {
 
     private final BudgetPlanService budgetPlanService;
@@ -15,17 +17,9 @@ public class BudgetPlanController {
     }
 
     @PostMapping("/{userId}")
-    public BudgetPlan createBudgetPlan(
+    public ResponseEntity<BudgetPlan> create(
             @PathVariable Long userId,
             @RequestBody BudgetPlan plan) {
-        return budgetPlanService.createBudgetPlan(userId, plan);
-    }
-
-    @GetMapping("/{userId}/{month}/{year}")
-    public BudgetPlan getBudgetPlan(
-            @PathVariable Long userId,
-            @PathVariable Integer month,
-            @PathVariable Integer year) {
-        return budgetPlanService.getBudgetPlan(userId, month, year);
+        return ResponseEntity.ok(budgetPlanService.createBudgetPlan(userId, plan));
     }
 }
