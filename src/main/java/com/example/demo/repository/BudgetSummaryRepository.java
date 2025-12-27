@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface BudgetSummaryRepository extends JpaRepository<BudgetSummary, Long> {
- Optional<BudgetSummary> findByBudgetPlan(BudgetPlan plan);
+
+    Optional<BudgetSummary> findByBudgetPlan(BudgetPlan budgetPlan);
 }
