@@ -16,7 +16,9 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionLogRepository transactionRepo;
     private final UserRepository userRepository;
 
-    public TransactionServiceImpl(TransactionLogRepository transactionRepo, UserRepository userRepository) {
+    public TransactionServiceImpl(
+            TransactionLogRepository transactionRepo,
+            UserRepository userRepository) {
         this.transactionRepo = transactionRepo;
         this.userRepository = userRepository;
     }
@@ -25,8 +27,8 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionLog addTransaction(Long userId, TransactionLog log) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
         log.setUser(user);
-        log.validate();
         return transactionRepo.save(log);
     }
 
@@ -34,6 +36,10 @@ public class TransactionServiceImpl implements TransactionService {
     public List<TransactionLog> getUserTransactions(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        return transactionRepo.findByUserId(userId);
+
+        return transactionRepo.findAll()
+                .stream()
+                .filter(t -> t.getUser().getId().equals(user.getId()))
+                .toList();
     }
 }
