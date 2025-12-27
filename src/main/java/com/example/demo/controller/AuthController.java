@@ -1,9 +1,7 @@
 package com.example.demo.controller;
 
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.AuthResponse;
+import com.example.demo.dto.*;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 
@@ -20,16 +18,14 @@ public class AuthController {
     @PostMapping("/register")
     public User register(@RequestBody RegisterRequest request) {
         User user = new User();
-        // Fixed: added () to call the methods correctly
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        user.setName(request.name);
+        user.setEmail(request.email);
+        user.setPassword(request.password);
         return userService.register(user);
     }
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody LoginRequest request) {
-        // Simple mock login response
         return new AuthResponse("dummy-jwt-token");
     }
 }
